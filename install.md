@@ -1,7 +1,7 @@
 # Osiris – Installation Guide  
 ## Backend Setup  
 1. Navigate to the backend directory      
-```bash    cd backend```
+```cd backend```
 
 2. Create a Python virtual environment
     

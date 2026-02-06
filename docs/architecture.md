@@ -115,3 +115,63 @@ We will use the following architecture:
 
 ## Architecture Overview
 
+[Next.js Frontend]
+|
+| REST / Auth JWT
+v
+[FastAPI Backend] ----> [Ollama AI Service]
+|
+v
+[Supabase PostgreSQL]
+
+
+Responsibilities:
+
+- **Next.js:** UI, code editor, dashboards, session management  
+- **FastAPI:** assessment logic, roadmap engine, AI prompt orchestration  
+- **Supabase:** users, progress, problem metadata  
+- **Ollama:** Socratic hints, concept explanations, difficulty analysis
+
+---
+
+## Consequences
+
+### Positive
+
+- Full control over AI behavior  
+- Low operational cost  
+- Strong privacy (no user code sent to external APIs)  
+- Rapid iteration for students/developers  
+- Clear separation of concerns
+
+### Risks
+
+- Local model quality lower than proprietary LLMs  
+- Hosting Ollama requires sufficient hardware  
+- Need strict prompt engineering to prevent answer leakage  
+- Multi-service architecture increases dev complexity
+
+### Mitigations
+
+- Add guard prompts + output validators  
+- Store interaction logs for moderation  
+- Allow model upgrade path  
+- Caching for repeated explanations
+
+---
+
+## Future Considerations
+
+- Add vector DB for concept retrieval  
+- Support multiple Ollama models  
+- WebSocket for real-time tutoring  
+- RBAC roles in Supabase  
+- Telemetry for learning analytics
+
+---
+
+## Author
+
+Project Team
+
+

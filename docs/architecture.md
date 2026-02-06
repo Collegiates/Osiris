@@ -115,7 +115,6 @@ We will use the following architecture:
 
 ## Architecture Overview
 
-![System Architecture](./diagram.svg)
 
 
 
@@ -167,6 +166,7 @@ Responsibilities:
 ## Author
 
 CXKing23
+
 
 
 

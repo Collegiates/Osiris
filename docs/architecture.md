@@ -115,16 +115,7 @@ We will use the following architecture:
 
 ## Architecture Overview
 
-flowchart TD
-    A[Next.js Frontend]
-    B[FastAPI Backend]
-    C[Supabase PostgreSQL]
-    D[Ollama AI Service]
-
-    A -->|REST / Auth JWT| B
-    B --> C
-    B --> D
-
+![System Architecture](./diagram.svg)
 
 
 
@@ -176,6 +167,7 @@ Responsibilities:
 ## Author
 
 Project Team
+
 
 
 

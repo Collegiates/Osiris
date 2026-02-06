@@ -1,176 +1,215 @@
-# ADR-0001: Core Technology Stack Selection
+# Architecture
 
-## Status
+This document records the major architectural decisions for the project.  
+Each layer of the system is captured as an independent Architecture Decision Record (ADR) within this file.
+
+System goals:
+
+- Guided, AI-assisted learning without providing direct solutions  
+- Scalable web platform for coding assessments and roadmaps  
+- Low operational cost with strong privacy  
+- Clear separation between UI, logic, data, and AI inference
+
+High level structure:
+
+- Frontend – Next.js  
+- Backend – FastAPI  
+- Data & Auth – Supabase (PostgreSQL)  
+- AI – Ollama (gpt-oss:20b)
+
+---
+
+## ADR-0001 – Frontend Framework: Next.js
+
+### Status
 Accepted – 2026-02-06
 
-## Context
+### Context
+The platform requires an interactive web interface for:
 
-The project aims to provide an AI-assisted platform that helps users prepare for technical interviews through guided coding practice.  
-Key requirements:
+- Coding assessments  
+- Progress dashboards  
+- Roadmap visualization  
+- Real-time AI tutoring interactions
 
-- Modern, responsive web interface  
-- Scalable backend for assessments, roadmap generation, and analytics  
-- Reliable authentication and data storage  
-- Local AI inference with controlled behavior (no direct solution generation)  
-- Low operational cost and strong privacy guarantees  
+We needed a frontend framework that supports fast iteration, good performance, and easy integration with a Python backend.
 
-We needed to choose a frontend framework, backend API layer, database/auth provider, and AI runtime that align with these goals while remaining feasible for a student/small-team project.
+### Decision
+Use **Next.js** as the primary frontend framework.
 
----
+### Rationale
 
-## Decision
+**Benefits**
 
-We will use the following architecture:
+- File-based routing and React ecosystem  
+- Server Components for performance  
+- Built-in API routes for BFF patterns  
+- Strong community and UI library support  
+- Simple deployment (Vercel or self-hosted)
 
-| Layer | Technology |
-|-----|------------|
-| Frontend | **Next.js** |
-| Backend API | **FastAPI (Python)** |
-| Database & Auth | **Supabase (PostgreSQL + Auth)** |
-| AI Runtime | **Ollama with gpt-oss:20b** |
+**Alternatives Considered**
 
----
+- React only – more boilerplate  
+- Vue/Nuxt – less team familiarity  
+- Angular – heavier and slower iteration
 
-## Rationale
+### Consequences
 
-### 1. Next.js – Frontend Framework
-
-**Chosen because:**
-
-- File-based routing and React ecosystem accelerate UI development  
-- Server Components and API routes simplify integration with FastAPI  
-- Built-in SSR improves performance and SEO  
-- Large ecosystem for UI libraries, editors, and authentication flows  
-- Easy deployment on Vercel or self-hosting
-
-**Alternatives considered**
-
-- Plain React – more boilerplate, no SSR  
-- Vue/Nuxt – good but less team familiarity  
-- Angular – heavier and slower to iterate
-
-**Conclusion:** Next.js provides the best balance between developer experience and production readiness.
+- Faster UI development  
+- Need to manage CORS with FastAPI  
+- Requires Node environment for builds
 
 ---
 
-### 2. FastAPI – Backend Service
+## ADR-0002 – Backend Service: FastAPI
 
-**Chosen because:**
+### Status
+Accepted – 2026-02-06
 
-- High performance with async support  
+### Context
+The backend must:
+
+- Evaluate assessments  
+- Generate learning roadmaps  
+- Orchestrate AI prompts  
+- Store and retrieve progress  
+- Expose a secure REST API
+
+### Decision
+Use **FastAPI (Python)** as the backend service.
+
+### Rationale
+
+**Benefits**
+
+- Async performance for AI calls  
 - Automatic OpenAPI documentation  
-- Strong type safety with Pydantic models  
-- Excellent integration with Python AI tooling  
-- Simple structure for roadmap logic and analytics
+- Strong typing with Pydantic  
+- Native Python ecosystem for ML  
+- Simple, explicit architecture
 
-**Alternatives considered**
+**Alternatives Considered**
 
 - Node/Express – weaker AI ecosystem  
-- Django – heavier than needed  
-- Go – great performance but slower iteration
+- Django – heavier than required  
+- Go – higher complexity for ML tasks
 
-**Conclusion:** FastAPI aligns naturally with AI orchestration and provides rapid, maintainable API development.
+### Consequences
 
----
-
-### 3. Supabase – Database & Authentication
-
-**Chosen because:**
-
-- Managed PostgreSQL with minimal DevOps overhead  
-- Built-in authentication (email, OAuth, JWT)  
-- Row Level Security for multi-tenant safety  
-- Real-time capabilities for progress tracking  
-- Cheaper and simpler than self-hosting Postgres + Auth service
-
-**Alternatives considered**
-
-- Firebase – NoSQL less suitable for relational progress data  
-- Self-hosted Postgres – more maintenance  
-- Auth0 – powerful but costly and external dependency
-
-**Conclusion:** Supabase provides production-grade DB + auth with the least complexity.
+- Clear boundary between UI and logic  
+- Easy integration with Ollama  
+- Requires API gateway or reverse proxy
 
 ---
 
-### 4. Ollama (gpt-oss:20b) – AI Layer
+## ADR-0003 – Data & Authentication: Supabase
 
-**Chosen because:**
+### Status
+Accepted – 2026-02-06
 
-- Fully local inference – no external API cost  
-- Behavior can be constrained to *guidance only*  
-- Works offline and respects privacy  
-- Custom prompts for Socratic tutoring  
-- Easy integration via REST
+### Context
+We require storage for:
 
-**Alternatives considered**
+- User accounts  
+- Assessment results  
+- Problem history  
+- Roadmap state  
+- Analytics
 
-- OpenAI API – higher quality but expensive and uncontrollable  
-- Smaller local models – weaker reasoning  
-- LangChain hosted services – adds latency and cost
+Authentication must support email and OAuth with minimal custom code.
 
-**Conclusion:** Ollama provides the right trade-off between capability, control, and cost.
+### Decision
+Use **Supabase** for PostgreSQL database and authentication.
+
+### Rationale
+
+**Benefits**
+
+- Managed PostgreSQL with RLS  
+- Built-in auth and JWT  
+- Real-time capabilities  
+- Minimal DevOps overhead  
+- Relational model fits progress data
+
+**Alternatives Considered**
+
+- Firebase – NoSQL mismatch  
+- Self-hosted Postgres – more ops work  
+- Auth0 – external dependency & cost
+
+### Consequences
+
+- Fast startup with secure auth  
+- Vendor dependency  
+- Need migrations strategy
 
 ---
 
-## Architecture Overview
+## ADR-0004 – AI Runtime: Ollama
 
-![System Architecture](./diagram.svg)
+### Status
+Accepted – 2026-02-06
 
+### Context
+The AI must:
 
+- Provide Socratic hints  
+- Analyze skill gaps  
+- Never return full solutions  
+- Operate with low cost  
+- Preserve user privacy
 
-Responsibilities:
+### Decision
+Use **Ollama running gpt-oss:20b** locally.
 
-- **Next.js:** UI, code editor, dashboards, session management  
-- **FastAPI:** assessment logic, roadmap engine, AI prompt orchestration  
-- **Supabase:** users, progress, problem metadata  
-- **Ollama:** Socratic hints, concept explanations, difficulty analysis
+### Rationale
+
+**Benefits**
+
+- No external API cost  
+- Full control over prompts  
+- Offline capability  
+- Privacy for user code  
+- REST integration
+
+**Alternatives Considered**
+
+- OpenAI API – expensive, uncontrollable  
+- Smaller models – weaker reasoning  
+- Hosted LangChain – latency & cost
+
+### Consequences
+
+- Requires capable hardware  
+- Need guardrails against answer leakage  
+- Model upgrades handled internally
 
 ---
 
-## Consequences
+## Cross-Layer Considerations
 
-### Positive
+### Integration Flow
 
-- Full control over AI behavior  
-- Low operational cost  
-- Strong privacy (no user code sent to external APIs)  
-- Rapid iteration for students/developers  
-- Clear separation of concerns
+1. User interacts with Next.js UI  
+2. FastAPI handles business logic  
+3. Supabase stores state  
+4. Ollama provides guided responses
 
 ### Risks
 
-- Local model quality lower than proprietary LLMs  
-- Hosting Ollama requires sufficient hardware  
-- Need strict prompt engineering to prevent answer leakage  
-- Multi-service architecture increases dev complexity
+- Local model quality  
+- Multi-service complexity  
+- Prompt safety
 
 ### Mitigations
 
-- Add guard prompts + output validators  
-- Store interaction logs for moderation  
-- Allow model upgrade path  
-- Caching for repeated explanations
-
----
-
-## Future Considerations
-
-- Add vector DB for concept retrieval  
-- Support multiple Ollama models  
-- WebSocket for real-time tutoring  
-- RBAC roles in Supabase  
-- Telemetry for learning analytics
+- Output validation layer  
+- Interaction logging  
+- Caching explanations  
+- Upgrade path for models
 
 ---
 
 ## Author
 
 CXKing23
-
-
-
-
-
-
-

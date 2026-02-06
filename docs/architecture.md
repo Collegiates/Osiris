@@ -115,14 +115,15 @@ We will use the following architecture:
 
 ## Architecture Overview
 
-[Next.js Frontend]
-|
-| REST / Auth JWT
-v
-[FastAPI Backend] ----> [Ollama AI Service]
-|
-v
-[Supabase PostgreSQL]
+[ Next.js Frontend ]
+          │
+     REST / JWT
+          ▼
+[ FastAPI Backend ] ────▶ [ Ollama AI Service ]
+          │
+          ▼
+[ Supabase PostgreSQL ]
+
 
 
 Responsibilities:
@@ -173,5 +174,6 @@ Responsibilities:
 ## Author
 
 Project Team
+
 
 

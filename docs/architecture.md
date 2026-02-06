@@ -17,6 +17,11 @@ High level structure:
 - Data & Auth – Supabase (PostgreSQL)  
 - AI – Ollama (gpt-oss:20b)
 
+Architecture Overview
+
+![System Architecture](./diagram.svg)
+
+
 ---
 
 ## ADR-0001 – Frontend Framework: Next.js
@@ -213,3 +218,4 @@ Use **Ollama running gpt-oss:20b** locally.
 ## Author
 
 CXKing23
+

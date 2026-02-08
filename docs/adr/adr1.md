@@ -1,3 +1,5 @@
+---
+
 ## ADR-0001 – Frontend Framework: Next.js
 
 ### Status

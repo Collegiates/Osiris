@@ -3,12 +3,12 @@
 
 ## Mission Statement:
 
-Osiris is an AI-powered coding practice platform designed to help developers and technical interview candidates improve their skills more effectively by focusing on their weakest areas. Rather than having users randomly select practice problems or rely on full solutions, Osiris begins with a coding assessment to identify skill gaps.
+Empowering developers to master their craft through personalized practice that turns weaknesses into strengths. 
 
 
-## Assessment Details:
+## Details:
 
-Based on the assessment results, Osiris will generate a personalized roadmap of coding problems tailored to each user’s needs. Osiris tracks progress over time, including completed problems, time spent, and performance patterns. Osiris uses this data to continuously refine the problems assigned to our users, using AI as a learning guide, not a problem solver. To ensure AI is used as a learning guide, Osiris assists users in understanding how to approach problems and what to practice next, without directly providing answers. The primary goal is to make interview preparation and skill development more efficient by ensuring users practice the right problems at the right time.
+Osiris is an AI-powered coding practice platform designed to help developers and technical interview candidates improve their skills more effectively by focusing on their weakest areas. Rather than having users randomly select practice problems or rely on full solutions, Osiris begins with a coding assessment to identify skill gaps. Based on the assessment results, Osiris will generate a personalized roadmap of coding problems tailored to each user’s needs. Osiris tracks progress over time, including completed problems, time spent, and performance patterns. Osiris uses this data to continuously refine the problems assigned to our users, using AI as a learning guide, not a problem solver. To ensure AI is used as a learning guide, Osiris assists users in understanding how to approach problems and what to practice next, without directly providing answers. The primary goal is to make interview preparation and skill development more efficient by ensuring users practice the right problems at the right time.
 
 
 ## Unique Features:

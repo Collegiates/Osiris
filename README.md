@@ -38,10 +38,15 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 
 3. **Install Dependencies:**
    ```bash
-   pip install fastapi uvicorn
+   pip install -r requirements.txt
    ```
 
-4. **Run the Backend Server:**
+4. **Return to Root Directory**
+   ```bash
+   cd ..
+   ```
+
+5. **Run the Backend Server:**
    ```bash
    uvicorn backend.main:app --reload
    ```

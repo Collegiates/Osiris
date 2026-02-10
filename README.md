@@ -16,7 +16,7 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 ## Tech Stack
 - **Backend:** FastAPI (Python)
 - **Frontend:** Next.js / Node.js
-- **Database:** Supabase
+- **Database:** Supabase (PostgreSQL)
 - **Local AI Platform:** Ollama
 
 ## Getting Started

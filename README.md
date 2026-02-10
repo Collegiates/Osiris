@@ -47,21 +47,24 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 `pip install fastapi uvicorn`
 `Frontend Package Manager (Next.js / Node.js)`
 
+**4. Run the Backend Server:**
+
+`uvicorn backend.main:app --reload`
 
 >**Note:** Please ensure you have Next.js and Homebrew installed before setup.
 
-**4. Navigate to Frontend Directory:**
+**5. Navigate to Frontend Directory:**
 
 `cd ../frontend/osiris`
 
 
-**5. Initialize Environment:**
+**6. Initialize Environment:**
 
 `python -m venv venv`
 `source venv/bin/activate`
 
 
-**6. Install Packages & Launch Development Server:**
+**7. Install Packages & Launch Development Server:**
 
 `npm install`
 `npm run dev`

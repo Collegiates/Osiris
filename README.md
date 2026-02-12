@@ -26,9 +26,9 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 ### Backend Setup
 
 1. **Set up environment variables**
-   ```bash
+   
    Look at .env.example in backend directory and create new file named .env and add correct variables from it (get variables from supabase or group member)
-   ```
+   
 
 2. **Navigate to the backend directory:**
    ```bash
@@ -59,9 +59,8 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 ### Frontend Setup
 
 1. **Environment variable set up:**
-```bash
-Create new file named .env.local in frontend/osiris directory and add correct variables from .env.example. Just copy everything from that file. Change backend url to your backend url if needed.
-```
+
+   Create new file named .env.local in frontend/osiris directory and add correct variables from .env.example. Just copy everything from that file. Change backend     url to your backend url if needed.
 
 2. **Navigate to the Frontend Directory:**
    ```bash

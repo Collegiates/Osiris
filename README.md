@@ -25,46 +25,56 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 
 ### Backend Setup
 
-1. **Navigate to the backend directory:**
+1. **Set up environment variables**
+   ```bash
+   Look at .env.example in backend directory and create new file named .env and add correct variables from it (get variables from supabase or group member)
+   ```
+
+2. **Navigate to the backend directory:**
    ```bash
    cd backend
    ```
 
-2. **Create & Activate a Virtual Environment:**
+3. **Create & Activate a Virtual Environment:**
    ```bash
    python -m venv venv
    source venv/bin/activate
    ```
 
-3. **Install Dependencies:**
+4. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Return to Root Directory**
+5. **Return to Root Directory**
    ```bash
    cd ..
    ```
 
-5. **Run the Backend Server:**
+6. **Run the Backend Server:**
    ```bash
    uvicorn backend.main:app --reload
    ```
 
 ### Frontend Setup
 
-1. **Navigate to the Frontend Directory:**
+1. **Environment variable set up:**
+```bash
+Create new file named .env.local in frontend/osiris directory and add correct variables from .env.example. Just copy everything from that file. Change backend url to your backend url if needed.
+```
+
+2. **Navigate to the Frontend Directory:**
    ```bash
    cd ../frontend/osiris
    ```
 
-2. **Initialize Environment:**
+3. **Initialize Environment:**
    ```bash
    python -m venv venv
    source venv/bin/activate
    ```
 
-3. **Install Packages & Launch Development Server:**
+4. **Install Packages & Launch Development Server:**
    ```bash
    npm install
    npm run dev

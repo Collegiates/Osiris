@@ -30,12 +30,12 @@ export default async function Page() {
 
 const client = `'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { useSupabase } from '@/components/supabase-provider'
 import { useEffect, useState } from 'react'
 
 export default function Page() {
   const [notes, setNotes] = useState<any[] | null>(null)
-  const supabase = createClient()
+  const supabase = useSupabase()
 
   useEffect(() => {
     const getData = async () => {
@@ -43,7 +43,7 @@ export default function Page() {
       setNotes(data)
     }
     getData()
-  }, [])
+  }, [supabase])
 
   return <pre>{JSON.stringify(notes, null, 2)}</pre>
 }

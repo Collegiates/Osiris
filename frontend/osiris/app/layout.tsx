@@ -22,6 +22,8 @@ const geistSans = Geist({
 import { getConfigForClient } from "@/lib/supabase/server";
 import SupabaseProvider from "@/components/supabase-provider";
 import { ConfigError } from "@/components/config-error";
+import { BackendHealthProvider } from "@/components/backend-health-provider";
+import { BackendStatusToast } from "@/components/backend-status-toast";
 
 export default async function RootLayout({
   children,
@@ -58,12 +60,15 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SupabaseProvider
-            supabaseUrl={configResult.config.NEXT_PUBLIC_SUPABASE_URL}
-            supabaseKey={configResult.config.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
-          >
-            {children}
-          </SupabaseProvider>
+          <BackendHealthProvider>
+            <SupabaseProvider
+              supabaseUrl={configResult.config.NEXT_PUBLIC_SUPABASE_URL}
+              supabaseKey={configResult.config.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+            >
+              {children}
+            </SupabaseProvider>
+            <BackendStatusToast />
+          </BackendHealthProvider>
         </ThemeProvider>
       </body>
     </html>

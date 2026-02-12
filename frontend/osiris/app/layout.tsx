@@ -19,11 +19,38 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+import { getConfigForClient } from "@/lib/supabase/server";
+import SupabaseProvider from "@/components/supabase-provider";
+import { ConfigError } from "@/components/config-error";
+import { BackendHealthProvider } from "@/components/backend-health-provider";
+import { BackendStatusToast } from "@/components/backend-status-toast";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const configResult = await getConfigForClient();
+
+  // If config failed, show error page
+  if (!configResult.success) {
+    return (
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${geistSans.className} antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ConfigError errorType={configResult.errorType} errorMessage={configResult.error} />
+          </ThemeProvider>
+        </body>
+      </html>
+    );
+  }
+
+  // Config succeeded, render normal layout
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
@@ -33,7 +60,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <BackendHealthProvider>
+            <SupabaseProvider
+              supabaseUrl={configResult.config.NEXT_PUBLIC_SUPABASE_URL}
+              supabaseKey={configResult.config.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+            >
+              {children}
+            </SupabaseProvider>
+            <BackendStatusToast />
+          </BackendHealthProvider>
         </ThemeProvider>
       </body>
     </html>

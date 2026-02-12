@@ -68,13 +68,7 @@ Create new file named .env.local in frontend/osiris directory and add correct va
    cd ../frontend/osiris
    ```
 
-3. **Initialize Environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-
-4. **Install Packages & Launch Development Server:**
+3. **Install Packages & Launch Development Server:**
    ```bash
    npm install
    npm run dev

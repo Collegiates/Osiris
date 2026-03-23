@@ -1,106 +1,86 @@
-1. Functional Requirements
+1. Functional Requirements:
 
-Camera Integration: System must ingest a live video feed from a webcam or Raspberry Pi camera pointed at the 3D printer bed.
+    System has to allow users to input code for the baseline assessment problems.
 
-Real-Time Monitoring: System must analyze video frames continuously to check for printing errors.
+    System must analyze the code to identify specific error types.
 
-User Accounts: User can make an account with their email and password, or link their Google account.
+    User can make an account with their email and password
 
-Alert System: System must send notifications (Email/SMS/App Push) to the user immediately upon detecting a potential failure.
+    User can linked their google account with the application
 
-History & Timelapse: System has to store print history, including pass/fail status and a timelapse video of the print.
+    System has to store user data like names and problems solved/progress
 
-Manual Override: User must be able to remotely view the live feed and override the AI’s decision (e.g., "Resume Print" if it was a false alarm).
+    System has to recommend problems in the form of roadmap to the user
 
-Failure Classification: System must identify specific defect types: "Spaghetti" (detachment), "Warping" (corners lifting), or "Layer Shift."
+    System must provide feedback to users solutions to problems
+
+    System must help the user when requested for help
+
+    User should be able to pick any problem in the roadmap
 
 
 
-Story 1: The Catastrophic Save
-As a maker, I want the system to automatically pause my printer if the print detaches from the bed, so that I don't wake up to a giant ball of plastic spaghetti and wasted filament.
-
+Story 1: Code Submission Analysis
+    As a developer, I want a coding practice site to analyze my code for correctness and efficiency, so that I get objective         feedback on my skills.
 Acceptance Criteria:
-The AI detects "Spaghetti" failure with >85% confidence.
+    Code is executed against at least 10 hidden test cases.
+    The AI analyzes the time complexity of the solution and decides if it bad,ok or great
+    The AI should explain where the code would fail if its not up to par
+    Provide hints to solve the problem when prompted too
+Story 2: The Living Roadmap
+    As a developer, I want a personalized roadmap so that I can efficiently progress toward my goal without guessing what to practice next. 
+    Acceptance Criteria:
+        Personalized road map that shows the user a clear path to achieve their goal
+        The roadmap adapts to the users skill as the user grows
+        The roadmap is saved and is ready for the user to continue it at their own pace. 
 
-The system sends a "Pause" command to the printer within 45 seconds of detection.(If we have time to add this feature)
-
-The system sends an alert to the user's phone with a snapshot of the failure.
-
-The printer heating element is turned off (safety) if the user doesn't respond in 15 minutes.(potential future implementations)
-
-
-Story 2: The False Alarm Protection
-
-As a user, I want the AI to ask for confirmation on ambiguous errors rather than killing a good print, so that I don't lose days of work due to a software glitch.
-
-Acceptance Criteria:
-If AI confidence is between 50-85% (Unsure), it sends a "Warning" alert but does not pause immediately.
-User can click "Ignore" or "Pause" from the dashboard.
-
-System learns from this interaction (Reinforcement Learning) to avoid flagging that specific geometry again.
-
-2. Non-Functional Requirements
-
-Latency: The time from "failure event" to "alert sent" should be no more than 60 seconds.
-
-Resource Efficiency: The vision model must run on low-power edge devices (like a Raspberry Pi 4) without causing the printer to stutter.
-
-False Positive Rate: The system must have a False Positive rate of less than 1% (stopping a good print is worse than missing a bad one).
-
-Connectivity: The system should handle temporary Wi-Fi disconnects gracefully (continue monitoring locally and sync later).
-
-Scalability: The backend should be able to handle hundreds of concurrent video streams (for a print farm manager) if scaled up.
-
-UI Response: The dashboard (live feed view) should load in under 2 seconds.
-
-Security: Video feeds must be encrypted to prevent unauthorized viewing of proprietary prototypes.
-
-Compliance: System must comply with GDPR/CCPA for user data (especially if faces are captured in the background).
-
-3. AI-Specific Requirements
-
-Context Window/Memory: The AI does not need a long text context, but it needs "Temporal Consistency" it should compare the current frame to the previous 5 frames to 
-ensure the error is persistent (not just a hand moving across the camera).
-
-Defect Recognition Capabilities: The AI must distinguish between "Support Material" (messy looking but intentional) and "Spaghetti" (messy looking and 
-unintentional).
-
-Lighting Adaptability: The AI must function correctly in various lighting conditions (e.g., lights off with only the printer's LCD glow, or bright daylight).
-Training Loop: The AI should allow users to tag "False Positives" in their history, which are then used to retrain the model to better understand that specific user's printer setup.
-
-Inference Speed: The AI should not take more than 2 seconds to process a single image frame on the edge device.
-
-4. Prioritization
-
-Must Haves (MVP)
-
-Connection to webcam and OctoPrint/Klipper.
-
-Detection of "Spaghetti" (Total Detachment) failure.
-
-Mobile-friendly dashboard to view the live feed.
-
-Basic alert system (Email).
+2.Non-Functional Requirements:
 
 
-Should Haves (Beta)
+    The roadmap should take no more than 45 seconds to be generated
 
-Detection of "Warping" (corners lifting off the bed).
+    AI Analysis must stream tokens to reduce perceived latency.
 
-Timelapse generation (auto-removing frames where the print head blocks the view).
+    The user code compiler must be strictly isolated to prevent users from attacking the server via the code runner.
+
+    The system must comply with GDPR/CCPA for user data
+
+    The system should be able to handle hundreds of user prompts every minute
+
+    Every page besides the roadmap should load in under a second
+
+    The user interface should be very easy and intuitive to use
+
+    The system should always maintain scalability
+
+    The system should always follow best practices for data security
 
 
-Nice to Haves (V2.0)
+4. AI-Specific Requirements
+    Context Window Management:
+        The AI will need to fetch data from the database because it can’t hold all of the users data like problems solved in context.
+    Tone & Style Calibration:
+        The AI must maintain a "Socratic" teaching style asking guiding questions rather than correcting the code immediately.
+    AI Capabilities:
+        The AI must be able to know if a solution to a problem is optimal or brute force.
+        AI should learn from the users past prompts to better tailor the answers it gives to what the users is looking for.
+        AI should not take more than 20 seconds to answer a prompt
+        AI should always know the current skill level of the user
+5. Prioritization
 
-"Confidence Slider" allowing users to set how sensitive the AI is
+Must haves:
+    System must have all types of problems for all skill levels .
+    The roadmap should be dynamically, changing depending on the users performance in problems.
+    Must have a skill examination to known the current skill level of the user
+    Must know the problems they already solved before
 
-Auto-Pause functionality
+Should have:
+    Hints using the socratic method, while solving a problem.(When the user asks for a hint)
+    Should have solutions to problems in a couple languages 
 
-Layer Shift detection (harder to see)
+Nice to have:
+    Syntax error highlighting, and built in function tab complete 
+    Sharing your map with other users
+    Improvement metric which tells you how much you improved so far.
 
-"Nozzle Clog" detection (inferring from lack of material flow)
-
-Thermal readings and detection
-
-SMS notifications
-
+testing

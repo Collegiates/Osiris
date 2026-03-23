@@ -9,9 +9,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "PrintGuard AI — Real-Time 3D Print Monitoring",
-  description:
-    "AI-powered computer vision that watches your 3D printers and stops failures before they waste filament and time.",
+  title: "Next.js and Supabase Starter Kit",
+  description: "The fastest way to build apps with Next.js and Supabase",
 };
 
 const geistSans = Geist({
@@ -31,23 +30,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const devMode = process.env.DEV_MODE === "true";
-
-  // ── DEV MODE: skip Supabase entirely ─────────────────────────────
-  if (devMode) {
-    return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.className} antialiased`}>
-          <BackendHealthProvider>
-            {children}
-            <BackendStatusToast />
-          </BackendHealthProvider>
-        </body>
-      </html>
-    );
-  }
-
-  // ── PRODUCTION: fetch Supabase config from backend ────────────────
   const configResult = await getConfigForClient();
 
   // If config failed, show error page
@@ -57,8 +39,8 @@ export default async function RootLayout({
         <body className={`${geistSans.className} antialiased`}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
-            enableSystem={false}
+            defaultTheme="system"
+            enableSystem
             disableTransitionOnChange
           >
             <ConfigError errorType={configResult.errorType} errorMessage={configResult.error} />
@@ -70,12 +52,12 @@ export default async function RootLayout({
 
   // Config succeeded, render normal layout
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
           <BackendHealthProvider>

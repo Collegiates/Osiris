@@ -14,22 +14,16 @@ const BackendHealthContext = createContext<BackendHealthContextType>({
     lastChecked: null,
 });
 
-const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
-
 export function BackendHealthProvider({ children }: { children: React.ReactNode }) {
-    // In dev mode, skip all polling and report online immediately.
-    // To restore real health checks: set NEXT_PUBLIC_DEV_MODE=false in .env.local.
-    const [status, setStatus] = useState<BackendStatus>(DEV_MODE ? "online" : "checking");
-    const [lastChecked, setLastChecked] = useState<Date | null>(DEV_MODE ? new Date() : null);
+    const [status, setStatus] = useState<BackendStatus>("checking");
+    const [lastChecked, setLastChecked] = useState<Date | null>(null);
 
     useEffect(() => {
-        if (DEV_MODE) return; // ← skip polling in dev/demo mode
-
         const checkHealth = async () => {
             try {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000);
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
 
                 const response = await fetch(`${apiUrl}/health`, {
                     signal: controller.signal,
@@ -50,8 +44,12 @@ export function BackendHealthProvider({ children }: { children: React.ReactNode 
             }
         };
 
+        // Check immediately on mount
         checkHealth();
+
+        // Then check every 30 seconds
         const interval = setInterval(checkHealth, 30000);
+
         return () => clearInterval(interval);
     }, []);
 

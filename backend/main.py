@@ -1,13 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.routers import assessments, roadmap, problems, progress, ai, meta
+from backend.routers import video, printer, stations
 from backend.database import db
+from backend.services.camera_manager import CameraManager
+from backend.services.station_registry import StationRegistry
+
+# Shared singletons
+cameraManager = CameraManager()
+stationRegistry = StationRegistry()
 
 app = FastAPI(
-    title="Interview Prep Roadmap API",
-    version="0.1.0",
-    description="Assessment-driven coding practice with Socratic AI guidance (no full solutions).",
+    title="PrintGuard Backend API",
+    version="0.2.0",
+    description="Multi-camera device streaming, station management, and printer control for PrintGuard.",
 )
 
 # Allow your frontend to talk to this backend
@@ -15,7 +21,7 @@ app = FastAPI(
 # IMPORTANT: CORS middleware must be added BEFORE routers
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], 
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,11 +36,17 @@ def root():
 def health_check():
     return {"status": "healthy"}
 
+# Wire shared singletons into the routers that need them
+video.cameraManager = cameraManager
+stations.init(stationRegistry, cameraManager)
+
 # Routers
-app.include_router(assessments.router)
-app.include_router(roadmap.router)
-app.include_router(problems.router)
-app.include_router(progress.router)
-app.include_router(ai.router)
-app.include_router(meta.router)
 app.include_router(db.router)
+app.include_router(video.router)
+app.include_router(printer.router)
+app.include_router(stations.router)
+
+
+@app.on_event("shutdown")
+def shutdownEvent() -> None:
+    cameraManager.stopAll()

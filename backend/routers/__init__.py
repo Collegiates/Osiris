@@ -1,1 +1,1 @@
-from backend.routers import assessments, roadmap, problems, progress, ai, meta
+from backend.routers import video, printer, stations

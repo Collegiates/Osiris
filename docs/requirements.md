@@ -48,7 +48,7 @@ Acceptance Criteria:
 ## AI-Specific Requirements
 - The AI must use a Socratic teaching style.
 - The AI must not provide full solutions.
-- The AI must account for the userâ€™s hidden skill level.
+- The AI must account for the user""™s hidden skill level.
 - The AI must adapt to past user prompts and performance.
 - The AI must be able to judge solution optimality and brute force.
 

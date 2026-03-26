@@ -13,19 +13,16 @@ Provide a fast, intuitive interface for assessments, topic roadmaps, and Socrati
 - Receive AI hints and conceptual guidance.
 - Track progress and skill trends over time.
 
-## Page Map (Planned)
+## Page Map (Implemented)
 - `/` Landing and onboarding entry.
-- `/auth` Sign up and sign in.
 - `/assessment` Assessment selection, flow, and results.
-- `/roadmaps` Topic roadmap list and placement guidance.
-- `/roadmap/[topic]` Topic roadmap overview with dynamic branching.
+- `/roadmaps` Topic roadmap list.
+- `/roadmap/[topic]` Topic roadmap detail.
 - `/problem/[id]` Problem details, editor, run, submit, and hints.
-- `/progress` Analytics and milestones.
-- `/settings` Profile, preferences, and AI help settings.
 
 ## Data Responsibilities
-- Fetch user profile, auth state, and hidden skill level.
-- Display topic roadmaps and branching paths from backend APIs.
+- Fetch assessment data and submit responses.
+- Display topic roadmaps from backend APIs.
 - Stream AI hints and guidance responses.
 - Render progress metrics and historical attempts.
 
@@ -43,13 +40,3 @@ Provide a fast, intuitive interface for assessments, topic roadmaps, and Socrati
   - topic roadmap generation and dynamic branching.
   - problem details and evaluation results.
   - AI hint and feedback streams.
-
-## Error Handling
-- Clear state for loading, streaming, and failures.
-- User-friendly messages for auth and submission errors.
-- Retry controls for AI calls and roadmap refresh.
-
-## Security Notes
-- Do not store private keys or secrets in the frontend.
-- Enforce role-based UI access where relevant.
-- Use secure cookies or tokens per Supabase guidance.

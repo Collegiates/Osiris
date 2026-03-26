@@ -2,19 +2,23 @@
 
 ## Root
 - `frontend`: Next.js client application for user-facing UI and interactions.
-- `backend`: FastAPI service for business logic, assessments, roadmaps, and AI routing.
+- `backend`: FastAPI service for business logic, assessments, roadmaps, AI, and execution.
 - `docs`: Project documentation, architecture, requirements, and scope tracking.
 - `BACKLOG.md`: Task list and milestones.
 - `README.md`: Setup instructions and project summary.
 
 ## Frontend
-- `frontend/osiris`: Next.js app source, routes, components, and UI assets.
-- `frontend/osiris/README.md`: Frontend-specific setup notes.
+- `frontend/osiris/app`: Next.js routes for assessment, roadmaps, and problems.
+- `frontend/osiris/components`: Shared UI components and status providers.
+- `frontend/osiris/lib`: Client utilities (API and Supabase helpers).
 
 ## Backend
-- `backend`: FastAPI application, API routes, and service logic (planned).
-- `backend/.env.example`: Environment variables template (planned).
-- `backend/requirements.txt`: Python dependencies list (planned).
+- `backend/routers`: API endpoints for assessments, roadmaps, problems, AI, and metadata.
+- `backend/models`: Pydantic schemas for API inputs/outputs.
+- `backend/content`: Content ingestion providers and canonical problem schema.
+- `backend/services`: External integrations (Judge0, Gemini, language registry).
+- `backend/database`: Memory store and env endpoint utilities.
+- `backend/tests`: API and logic tests.
 
 ## Docs
 - `docs/architecture.md`: Architecture decisions and system overview.

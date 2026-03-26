@@ -1,9 +1,9 @@
 ---
 
-## ADR-0004 – AI Runtime: Local, Cloud, or Hybrid
+## ADR-0004 – AI Runtime: Gemini (Cloud-Only)
 
 ### Status
-Under Review – 2026-03-26
+Accepted – 2026-03-26
 
 ### Context
 The AI must:
@@ -11,18 +11,17 @@ The AI must:
 - Analyze skill gaps.
 - Never return full solutions.
 - Operate with low latency.
-- Preserve user privacy where possible.
 
 ### Decision
-Evaluate **local, cloud, and hybrid** runtime options.
+Use **Gemini** as a cloud-only AI runtime.
 
 ### Rationale
-- Local options improve privacy and reduce marginal cost.
-- Cloud options improve reasoning quality and scaling.
-- Hybrid provides a flexible upgrade path.
+- High-quality reasoning.
+- Managed scaling and reliability.
+- Faster iteration during MVP.
 
 ### Consequences
-- Requires a routing layer and metrics to compare options.
-- Final decision will affect cost model and infrastructure.
+- Usage-based cost model.
+- External dependency for AI availability.
 
 ---

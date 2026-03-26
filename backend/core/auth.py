@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import HTTPException, status
 
-def require_user(authorization: Optional[str]) -> str:
+def requireUser(authorization: Optional[str]) -> str:
     """
     Placeholder auth gate.
 

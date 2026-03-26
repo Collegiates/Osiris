@@ -14,7 +14,7 @@ This document records major architectural decisions for the project. Each layer 
 - Backend: FastAPI
 - Data & Auth: Supabase (PostgreSQL)
 - Code Execution: Judge0 (self-hosted for development)
-- AI Runtime: Under evaluation (local, cloud, or hybrid)
+- AI Runtime: Gemini (cloud-only)
 
 ## Architecture Overview
 
@@ -107,10 +107,10 @@ Use **Supabase** for PostgreSQL database and authentication.
 
 ---
 
-## ADR-0004 – AI Runtime: Local, Cloud, or Hybrid
+## ADR-0004 – AI Runtime: Gemini (Cloud-Only)
 
 ### Status
-Under Review – 2026-03-26
+Accepted – 2026-03-26
 
 ### Context
 The AI must:
@@ -118,19 +118,18 @@ The AI must:
 - Analyze skill gaps.
 - Never return full solutions.
 - Operate with low latency.
-- Preserve user privacy where possible.
 
 ### Decision
-Evaluate **local, cloud, and hybrid** runtime options.
+Use **Gemini** as a cloud-only AI runtime.
 
 ### Rationale
-- Local options improve privacy and reduce marginal cost.
-- Cloud options improve reasoning quality and scaling.
-- Hybrid provides a flexible upgrade path.
+- High-quality reasoning.
+- Managed scaling and reliability.
+- Faster iteration during MVP.
 
 ### Consequences
-- Requires a routing layer and metrics to compare options.
-- Final decision will affect cost model and infrastructure.
+- Usage-based cost model.
+- External dependency for AI availability.
 
 ---
 
@@ -163,10 +162,10 @@ Use **Judge0 self-hosted** for development environments.
 2. FastAPI handles business logic and assessment scoring.
 3. Supabase stores users, skill levels, and roadmap state.
 4. Judge0 executes code runs and submissions.
-5. AI runtime provides guided responses.
+5. Gemini provides guided responses.
 
 ### Risks
-- Model quality or cost volatility.
+- Model cost volatility.
 - Multi-service complexity.
 - Code execution isolation failures.
 
@@ -174,7 +173,6 @@ Use **Judge0 self-hosted** for development environments.
 - Output validation layer.
 - Interaction logging.
 - Execution sandboxing and rate limits.
-- Upgrade path for AI models.
 
 ---
 

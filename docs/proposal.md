@@ -1,7 +1,7 @@
 # Project Proposal
 
 ## Problem Statement
-Preparing for coding interviews and improving programming skills is inefficient because most platforms do not adapt to a learnerâ€™s actual strengths and weaknesses. Users end up practicing too many basic topics or getting stuck without a clear path forward.
+Preparing for coding interviews and improving programming skills is inefficient because most platforms do not adapt to a learner""™s actual strengths and weaknesses. Users end up practicing too many basic topics or getting stuck without a clear path forward.
 
 ## Target Users
 - Computer science students preparing for internships or full-time roles.
@@ -30,5 +30,5 @@ Instead of a single global roadmap, Osiris provides many smaller, dynamic roadma
   Stores users, assessments, skill levels, roadmaps, and progress history.
 - **Code Execution (Judge0, self-hosted for development)**
   Secure execution for user submissions with isolated runtimes.
-- **AI Runtime (TBD)**
-  Evaluating local, cloud, or hybrid models to balance quality, cost, and privacy.
+- **AI Runtime (Gemini, cloud-only)**
+  Provides Socratic guidance with high-quality reasoning.

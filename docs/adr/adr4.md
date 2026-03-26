@@ -1,66 +1,28 @@
 ---
 
-## ADR-0004 – AI Runtime: Ollama
+## ADR-0004 – AI Runtime: Local, Cloud, or Hybrid
 
 ### Status
-Accepted – 2026-02-06
+Under Review – 2026-03-26
 
 ### Context
 The AI must:
-
-- Provide Socratic hints  
-- Analyze skill gaps  
-- Never return full solutions  
-- Operate with low cost  
-- Preserve user privacy
+- Provide Socratic hints.
+- Analyze skill gaps.
+- Never return full solutions.
+- Operate with low latency.
+- Preserve user privacy where possible.
 
 ### Decision
-Use **Ollama running gpt-oss:20b** locally.
+Evaluate **local, cloud, and hybrid** runtime options.
 
 ### Rationale
-
-**Benefits**
-
-- No external API cost  
-- Full control over prompts  
-- Offline capability  
-- Privacy for user code  
-- REST integration
-
-**Alternatives Considered**
-
-- OpenAI API – expensive, uncontrollable  
-- Smaller models – weaker reasoning  
-- Hosted LangChain – latency & cost
+- Local options improve privacy and reduce marginal cost.
+- Cloud options improve reasoning quality and scaling.
+- Hybrid provides a flexible upgrade path.
 
 ### Consequences
-
-- Requires capable hardware  
-- Need guardrails against answer leakage  
-- Model upgrades handled internally
-
----
-
-## Cross-Layer Considerations
-
-### Integration Flow
-
-1. User interacts with Next.js UI  
-2. FastAPI handles business logic  
-3. Supabase stores state  
-4. Ollama provides guided responses
-
-### Risks
-
-- Local model quality  
-- Multi-service complexity  
-- Prompt safety
-
-### Mitigations
-
-- Output validation layer  
-- Interaction logging  
-- Caching explanations  
-- Upgrade path for models
+- Requires a routing layer and metrics to compare options.
+- Final decision will affect cost model and infrastructure.
 
 ---

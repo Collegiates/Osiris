@@ -1,59 +1,34 @@
 # Project Proposal
 
-## Problem Statement  
-**What & Why**
+## Problem Statement
+Preparing for coding interviews and improving programming skills is inefficient because most platforms do not adapt to a learner’s actual strengths and weaknesses. Users end up practicing too many basic topics or getting stuck without a clear path forward.
 
-Preparing for coding interviews and improving programming skills is inefficient for many developers because they do not know *what* to practice or *what they are weak at*. Most platforms present large problem banks without guidance, leading users to either randomly select problems, rely on full solutions, or reverse-engineer answers without truly improving their skills.
+## Target Users
+- Computer science students preparing for internships or full-time roles.
+- Developers preparing for technical interviews.
+- Self-taught programmers strengthening weak areas.
+- Anyone practicing data structures and algorithms who wants structured improvement.
 
-Current approaches such as watching tutorials, asking AI for answers, or searching for solutions prioritize completion over understanding. This results in shallow learning, poor skill transfer, and wasted preparation time.
+## Solution Overview
+Osiris is a learning platform that starts with a choice of assessment length. Users can take a short or normal assessment, after which the system assigns a hidden skill level that updates over time. That skill level places users within topic-specific roadmaps such as Strings, Lists, Trees, or Dictionaries.
 
-Our project addresses this by identifying skill gaps first, then guiding users toward focused, intentional practice.
+Instead of a single global roadmap, Osiris provides many smaller, dynamic roadmaps. If a user struggles on a problem, the roadmap branches into prerequisite skills, allowing the user to build fundamentals before returning to the original topic. AI guidance follows a Socratic style, providing hints and conceptual guidance without full solutions.
 
----
+## Key Characteristics
+- Choice of short or normal assessment at signup.
+- Hidden skill level that adjusts with performance.
+- Topic roadmaps with dynamic branching.
+- AI guidance that teaches without solving.
+- Progress tracking and analytics over time.
 
-## Target Users  
-**Who Benefits**
-
-- Computer science students preparing for internships or full-time roles  
-- Developers preparing for technical interviews  
-- Self-taught programmers looking to strengthen weak areas  
-- Anyone practicing data structures and algorithms who wants structured improvement rather than random repetition  
-
-The platform is designed to support users at varying skill levels, from beginner to advanced.
-
----
-
-## Solution Overview  
-**How the App Solves the Problem**
-
-The application begins with a coding assessment that evaluates a user’s strengths and weaknesses across core programming topics. Based on assessment results and ongoing performance, the system generates a personalized roadmap of coding problems tailored to the user’s needs.
-
-Key characteristics of the solution:
-- Problems are recommended dynamically based on observed weaknesses
-- Progress is tracked over time, including completed problems and time spent
-- The AI acts as a learning guide, not a solver  
-- Guidance is provided using a Socratic approach, asking leading questions and offering conceptual hints rather than full solutions  
-- The roadmap adapts as the user improves or continues to struggle with specific topics  
-
-The goal is to ensure users practice the *right problems at the right time*, maximizing learning efficiency and long-term skill growth.
-
----
-
-## Tech Stack Justification  
-**Why These Tools**
-
-- **Next.js**  
-  Provides a modern, performant frontend framework with built-in routing, server-side rendering, and scalability. It enables a clean user experience for assessments, problem navigation, and progress tracking.
-
-- **FastAPI**  
-  Offers a high-performance Python backend with automatic API documentation, strong type validation, and async support. It is well-suited for handling assessments, roadmap logic, user data, and AI integration.
-
-- **PostgreSQL**  
-  A reliable relational database ideal for storing user accounts, assessment results, problem history, performance metrics, and roadmap state with strong consistency guarantees.
-
-- **gpt-oss:20b (via Ollama)**  
-  Enables local, self-hosted AI inference without relying on external APIs. This allows greater control over behavior, privacy, cost, and response constraints. The model is used strictly for guidance, analysis, and roadmap generation—not for providing direct solutions.
-
-This stack balances performance, scalability, developer productivity, and control over AI behavior while remaining practical for both prototyping and future expansion.
-
----
+## Tech Stack Justification
+- **Next.js**
+  Provides a modern frontend for assessments, roadmaps, and progress tracking.
+- **FastAPI**
+  Powers backend logic for assessment scoring, roadmap orchestration, and AI routing.
+- **Supabase (PostgreSQL)**
+  Stores users, assessments, skill levels, roadmaps, and progress history.
+- **Code Execution (Judge0, self-hosted for development)**
+  Secure execution for user submissions with isolated runtimes.
+- **AI Runtime (TBD)**
+  Evaluating local, cloud, or hybrid models to balance quality, cost, and privacy.

@@ -1,85 +1,69 @@
-1. Functional Requirements:
+# Requirements
 
-    System has to allow users to input code for the baseline assessment problems.
+## Functional Requirements
+- Users can create accounts and sign in with email and password.
+- Users can link a Google account.
+- Users can choose between short and normal assessments on first sign up.
+- Short assessment includes 1 coding problem (easy to medium) and 10 CS questions.
+- Normal assessment includes 2 coding problems and 10 CS questions.
+- System assigns a hidden skill level after assessment and updates it over time.
+- Users can select any topic roadmap after login.
+- Roadmaps are topic-based (Strings, Lists, Trees, Dictionaries, etc.).
+- Roadmaps are dynamic and can branch when users struggle.
+- Struggle is determined by elapsed time and failed submissions, with a max of 3 failed submissions.
+- Users can run code without consuming a submission attempt.
+- System stores user data, roadmap progress, and attempt history.
+- AI provides Socratic hints and conceptual guidance without full solutions.
+- System recommends next problems based on skill level and performance.
 
-    System must analyze the code to identify specific error types.
-
-    User can make an account with their email and password
-
-    User can linked their google account with the application
-
-    System has to store user data like names and problems solved/progress
-
-    System has to recommend problems in the form of roadmap to the user
-
-    System must provide feedback to users solutions to problems
-
-    System must help the user when requested for help
-
-    User should be able to pick any problem in the roadmap
-
-
-
+## User Stories
 Story 1: Code Submission Analysis
-    As a developer, I want a coding practice site to analyze my code for correctness and efficiency, so that I get objective         feedback on my skills.
+As a developer, I want my code evaluated for correctness and efficiency so I can understand my current skill level.
 Acceptance Criteria:
-    Code is executed against at least 10 hidden test cases.
-    The AI analyzes the time complexity of the solution and decides if it bad,ok or great
-    The AI should explain where the code would fail if its not up to par
-    Provide hints to solve the problem when prompted too
-Story 2: The Living Roadmap
-    As a developer, I want a personalized roadmap so that I can efficiently progress toward my goal without guessing what to practice next. 
-    Acceptance Criteria:
-        Personalized road map that shows the user a clear path to achieve their goal
-        The roadmap adapts to the users skill as the user grows
-        The roadmap is saved and is ready for the user to continue it at their own pace. 
+- Code is executed against at least 10 hidden test cases.
+- The AI analyzes time complexity and labels it as bad, ok, or great.
+- The AI explains where the solution would fail if incorrect.
+- The AI provides hints when requested without giving full solutions.
 
-2.Non-Functional Requirements:
+Story 2: Dynamic Topic Roadmaps
+As a developer, I want topic-specific roadmaps that adjust when I struggle so I can strengthen weak areas efficiently.
+Acceptance Criteria:
+- Topic roadmaps are available after assessment.
+- A hidden skill level determines placement inside a roadmap.
+- The roadmap branches to prerequisite skills when struggle criteria are met.
+- Roadmap progress is saved and can be resumed at any time.
 
+## Non-Functional Requirements
+- Roadmap generation should take no more than 45 seconds.
+- AI responses should begin streaming quickly to reduce perceived latency.
+- AI should respond within 20 seconds for typical prompts.
+- Code execution must be isolated to prevent user attacks.
+- System must comply with GDPR and CCPA for user data.
+- System should handle hundreds of user prompts per minute.
+- Key pages should load in under one second on typical connections.
+- The UI must remain simple and intuitive.
+- The system must remain scalable as usage grows.
+- The system should follow best practices for data security.
 
-    The roadmap should take no more than 45 seconds to be generated
+## AI-Specific Requirements
+- The AI must use a Socratic teaching style.
+- The AI must not provide full solutions.
+- The AI must account for the user’s hidden skill level.
+- The AI must adapt to past user prompts and performance.
+- The AI must be able to judge solution optimality and brute force.
 
-    AI Analysis must stream tokens to reduce perceived latency.
+## Prioritization
+Must Have:
+- Short and normal assessments.
+- Hidden skill level that changes over time.
+- Topic roadmaps with dynamic branching.
+- Submission tracking with max 3 failed submissions.
+- AI hints using the Socratic method.
 
-    The user code compiler must be strictly isolated to prevent users from attacking the server via the code runner.
+Should Have:
+- Solutions in multiple languages for reference after completion.
+- Syntax highlighting and helpful editor tooling.
 
-    The system must comply with GDPR/CCPA for user data
-
-    The system should be able to handle hundreds of user prompts every minute
-
-    Every page besides the roadmap should load in under a second
-
-    The user interface should be very easy and intuitive to use
-
-    The system should always maintain scalability
-
-    The system should always follow best practices for data security
-
-
-4. AI-Specific Requirements
-    Context Window Management:
-        The AI will need to fetch data from the database because it can’t hold all of the users data like problems solved in context.
-    Tone & Style Calibration:
-        The AI must maintain a "Socratic" teaching style asking guiding questions rather than correcting the code immediately.
-    AI Capabilities:
-        The AI must be able to know if a solution to a problem is optimal or brute force.
-        AI should learn from the users past prompts to better tailor the answers it gives to what the users is looking for.
-        AI should not take more than 20 seconds to answer a prompt
-        AI should always know the current skill level of the user
-5. Prioritization
-
-Must haves:
-    System must have all types of problems for all skill levels .
-    The roadmap should be dynamically, changing depending on the users performance in problems.
-    Must have a skill examination to known the current skill level of the user
-    Must know the problems they already solved before
-
-Should have:
-    Hints using the socratic method, while solving a problem.(When the user asks for a hint)
-    Should have solutions to problems in a couple languages 
-
-Nice to have:
-    Syntax error highlighting, and built in function tab complete 
-    Sharing your map with other users
-    Improvement metric which tells you how much you improved so far.
-
+Nice to Have:
+- Sharing roadmaps with other users.
+- Improvement metrics over time.

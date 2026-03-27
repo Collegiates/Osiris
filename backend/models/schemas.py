@@ -121,6 +121,44 @@ class ProblemDetailResponse(BaseModel):
     testsObjectKey: Optional[str] = None
 
 
+class ExecutionLanguageResponse(BaseModel):
+    languageKey: str
+    displayName: str
+    judge0LanguageId: int
+    isEnabled: bool
+
+
+class ExecutionLanguagesResponse(BaseModel):
+    providerMode: str
+    languages: List[ExecutionLanguageResponse]
+
+
+class ProblemRunRequest(BaseModel):
+    languageKey: str
+    sourceCode: str
+    stdin: Optional[str] = ""
+
+
+class ProblemRunResponse(BaseModel):
+    status: str
+    providerMode: str
+    languageKey: str
+    message: str
+
+
+class ProblemSubmitRequest(BaseModel):
+    languageKey: str
+    sourceCode: str
+    stdin: Optional[str] = ""
+
+
+class ProblemSubmitResponse(BaseModel):
+    status: str
+    providerMode: str
+    languageKey: str
+    message: str
+
+
 class RoadmapTopicResponse(BaseModel):
     topicId: str
     slug: str

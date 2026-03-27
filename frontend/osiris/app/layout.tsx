@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Sora } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,18 +9,18 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Osiris Learning Platform",
-  description: "Socratic AI tutoring with assessments and guided practice.",
+  title: "Osiris - Socratic Learning Platform for Developers",
+  description: "Master your craft through personalized practice. AI-powered Socratic tutoring that turns your weaknesses into strengths.",
 };
 
-const sora = Sora({
-  variable: "--font-sora",
+const geist = Geist({
+  variable: "--font-geist",
   display: "swap",
   subsets: ["latin"],
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   display: "swap",
   subsets: ["latin"],
 });
@@ -42,10 +42,10 @@ export default async function RootLayout({
   if (!configResult.success) {
     return (
       <html lang="en" suppressHydrationWarning>
-        <body className={`${sora.variable} ${newsreader.variable} font-body antialiased`}>
+        <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
@@ -59,10 +59,10 @@ export default async function RootLayout({
   // Config succeeded, render normal layout
   return (
     <html lang="en" suppressHydrationWarning>
-        <body className={`${sora.variable} ${newsreader.variable} font-body antialiased`}>
+      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

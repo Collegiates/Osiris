@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.routers import assessments, meta, problems, roadmaps
+from backend.routers import assessments, execution, meta, problems, roadmaps
 from backend.database import db
 
 app = FastAPI(
@@ -30,4 +30,5 @@ app.include_router(assessments.router)
 app.include_router(meta.router)
 app.include_router(problems.router)
 app.include_router(roadmaps.router)
+app.include_router(execution.router)
 app.include_router(db.router)

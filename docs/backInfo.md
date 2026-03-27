@@ -16,6 +16,9 @@ Provide secure assessment evaluation and hidden skill level calculation while en
 - `POST /assessments/{assessmentId}/submit`
 - `GET /problems`
 - `GET /problems/{problemId}`
+- `POST /problems/{problemId}/run` (Stage 4 contract, provider-gated)
+- `POST /problems/{problemId}/submit` (Stage 4 contract, provider-gated)
+- `GET /execution/languages` (language registry)
 - `GET /roadmaps`
 - `GET /roadmaps/{roadmapId}`
 - `POST /roadmaps/start`
@@ -34,6 +37,11 @@ Provide secure assessment evaluation and hidden skill level calculation while en
 - Store problem metadata and versions in Supabase (CodeNet ingestion).
 - Store test suites in Supabase Storage with object key references in `problem_versions` and `test_suites`.
 - Store roadmap nodes, edges, and per-user node progress in Supabase.
+- Store execution language enablement in backend config (`EXECUTION_ENABLED_LANGUAGES`) with future-ready keys: `python`, `javascript`, `java`, `cpp`.
+
+## Stage 4 / 4.5 Split
+- Stage 4: API contracts, language registry, gating, and frontend language plumbing.
+- Stage 4.5: live Judge0 runtime wiring and run/submit execution polling.
 
 ## Security Notes
 - Supabase RLS for data ownership boundaries (planned).

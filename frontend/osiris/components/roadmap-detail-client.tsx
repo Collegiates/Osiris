@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import { useSupabase } from "@/components/supabase-provider";
 import { apiFetchWithAuth } from "@/lib/apiClient";
 
@@ -28,13 +29,27 @@ type RoadmapResponse = {
   edges: RoadmapEdge[];
 };
 
+type ExecutionLanguage = {
+  languageKey: string;
+  displayName: string;
+  judge0LanguageId: number;
+  isEnabled: boolean;
+};
+
+type ExecutionLanguagesResponse = {
+  providerMode: string;
+  languages: ExecutionLanguage[];
+};
+
 const difficultyThresholds: Record<string, number> = {
   easy: 20 * 60,
   medium: 35 * 60,
   hard: 50 * 60,
 };
 
-export function RoadmapDetailClient({ roadmapId }: { roadmapId: string }) {
+export function RoadmapDetailClient() {
+  const params = useParams<{ roadmapId: string }>();
+  const roadmapId = params.roadmapId;
   const supabase = useSupabase();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
@@ -43,6 +58,8 @@ export function RoadmapDetailClient({ roadmapId }: { roadmapId: string }) {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showBranchPrompt, setShowBranchPrompt] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [enabledLanguages, setEnabledLanguages] = useState<ExecutionLanguage[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("python");
 
   const activeNode = useMemo(
     () => roadmap?.nodes.find((node) => node.nodeId === activeNodeId) ?? null,
@@ -51,6 +68,10 @@ export function RoadmapDetailClient({ roadmapId }: { roadmapId: string }) {
 
   useEffect(() => {
     const load = async () => {
+      if (!roadmapId) {
+        setError("Missing roadmap id");
+        return;
+      }
       const { data } = await supabase.auth.getSession();
       const token = data.session?.access_token || null;
       setAccessToken(token);
@@ -63,6 +84,17 @@ export function RoadmapDetailClient({ roadmapId }: { roadmapId: string }) {
           `/roadmaps/${roadmapId}`,
           token
         );
+        const languageResponse = await apiFetchWithAuth<ExecutionLanguagesResponse>(
+          "/execution/languages",
+          token
+        );
+        const languageOptions = languageResponse.languages.filter(
+          (language) => language.isEnabled
+        );
+        setEnabledLanguages(languageOptions);
+        if (languageOptions.length > 0) {
+          setSelectedLanguage(languageOptions[0].languageKey);
+        }
         response.nodes.sort((a, b) => a.positionIndex - b.positionIndex);
         setRoadmap(response);
         if (!activeNodeId) {
@@ -216,6 +248,25 @@ export function RoadmapDetailClient({ roadmapId }: { roadmapId: string }) {
         {activeNode ? (
           <>
             <p className="text-sm text-white/70">Difficulty: {activeNode.difficulty ?? "medium"}</p>
+            {enabledLanguages.length > 1 && (
+              <div className="mt-3 flex items-center gap-3">
+                <label htmlFor="languageKey" className="text-sm text-white/70">
+                  Language
+                </label>
+                <select
+                  id="languageKey"
+                  value={selectedLanguage}
+                  onChange={(event) => setSelectedLanguage(event.target.value)}
+                  className="rounded-lg border border-white/20 bg-black px-3 py-2 text-sm text-white outline-none"
+                >
+                  {enabledLanguages.map((language) => (
+                    <option key={language.languageKey} value={language.languageKey}>
+                      {language.displayName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <p className="mt-3 text-lg font-semibold">{activeNode.title}</p>
             <div className="mt-4 flex flex-wrap gap-2 text-sm">
               <button

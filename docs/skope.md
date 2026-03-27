@@ -34,5 +34,6 @@ Deliver a learning platform that uses a Socratic AI tutor to assess skill level,
 - Does it keep latency, security, and privacy within defined requirements?
 
 ## Open Decisions
+- Stage 4.5 runtime target for Judge0 (CachyOS Linux preferred over macOS/Colima for isolate compatibility).
 - Production hosting approach for code execution service.
 - Problem bank licensing and production content source.

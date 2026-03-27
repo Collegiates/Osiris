@@ -16,6 +16,7 @@
 - `backend/routers`: API endpoints for assessments and metadata.
 - `backend/models`: Pydantic schemas for API inputs/outputs.
 - `backend/database`: Memory store, Supabase client helpers, and env endpoint utilities.
+- `backend/services`: execution language registry and execution-provider abstractions.
 - `backend/scripts`: Offline ingestion scripts (CodeNet import and test suite uploads).
 - `backend/tests`: API tests for assessment flows.
 

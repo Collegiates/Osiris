@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 from uuid import UUID
 
-from backend.models.schemas import AssessmentType, Topic
+from backend.models.schemas import AssessmentType, Topic, QuestionType
 
 
 @dataclass
@@ -14,6 +14,7 @@ class AssessmentSession:
     assessmentType: AssessmentType
     createdAt: str
     questionIds: List[UUID]
+    questionTypeById: Dict[UUID, QuestionType]
 
 
 @dataclass

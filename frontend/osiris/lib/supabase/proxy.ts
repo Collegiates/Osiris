@@ -117,12 +117,11 @@ export const updateSession = async (request: NextRequest) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  const pathName = request.nextUrl.pathname;
+  const protectedPrefixes = ["/protected", "/assessment"];
+  const isProtectedRoute = protectedPrefixes.some((prefix) => pathName.startsWith(prefix));
+
+  if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -143,4 +142,3 @@ export const updateSession = async (request: NextRequest) => {
 
   return supabaseResponse;
 };
-

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Newsreader, Sora } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,12 +9,18 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Osiris Learning Platform",
+  description: "Socratic AI tutoring with assessments and guided practice.",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
+  variable: "--font-sora",
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   display: "swap",
   subsets: ["latin"],
 });
@@ -36,7 +42,7 @@ export default async function RootLayout({
   if (!configResult.success) {
     return (
       <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.className} antialiased`}>
+        <body className={`${sora.variable} ${newsreader.variable} font-body antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -53,7 +59,7 @@ export default async function RootLayout({
   // Config succeeded, render normal layout
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+        <body className={`${sora.variable} ${newsreader.variable} font-body antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

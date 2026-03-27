@@ -6,15 +6,10 @@ from typing import Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
-from pydantic.config import ConfigDict
 
 
 def nowIso() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-
-class CamelBaseModel(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
 
 
 class Topic(str, Enum):
@@ -46,12 +41,12 @@ class QuestionType(str, Enum):
     cs = "cs"
 
 
-class AssessmentStartRequest(CamelBaseModel):
+class AssessmentStartRequest(BaseModel):
     assessmentType: AssessmentType
     topics: Optional[List[Topic]] = Field(default=None)
 
 
-class AssessmentStartResponse(CamelBaseModel):
+class AssessmentStartResponse(BaseModel):
     assessmentId: UUID
     createdAt: str
     assessmentType: AssessmentType
@@ -59,7 +54,7 @@ class AssessmentStartResponse(CamelBaseModel):
     instructions: str
 
 
-class Question(CamelBaseModel):
+class Question(BaseModel):
     questionId: UUID
     questionType: QuestionType
     topic: Topic
@@ -68,24 +63,24 @@ class Question(CamelBaseModel):
     problemId: Optional[str] = None
 
 
-class AssessmentGetResponse(CamelBaseModel):
+class AssessmentGetResponse(BaseModel):
     assessmentId: UUID
     createdAt: str
     questions: List[Question]
 
 
-class AssessmentSubmitRequest(CamelBaseModel):
+class AssessmentSubmitRequest(BaseModel):
     answers: Dict[UUID, str]
     timeSpentSeconds: int = Field(ge=0)
 
 
-class SkillScore(CamelBaseModel):
+class SkillScore(BaseModel):
     topic: Topic
     score: float = Field(ge=0.0, le=1.0)
     confidence: float = Field(ge=0.0, le=1.0)
 
 
-class AssessmentResultResponse(CamelBaseModel):
+class AssessmentResultResponse(BaseModel):
     assessmentId: UUID
     submittedAt: str
     assessmentType: AssessmentType
@@ -93,3 +88,34 @@ class AssessmentResultResponse(CamelBaseModel):
     hiddenSkillLevel: float
     skillProfile: List[SkillScore]
     recommendedFocus: List[Topic]
+
+
+class ProblemListItem(BaseModel):
+    problemId: str
+    problemVersionId: str
+    title: str
+    summary: Optional[str] = None
+    difficulty: Optional[str] = None
+    topicId: Optional[str] = None
+    sourceDataset: Optional[str] = None
+    externalId: Optional[str] = None
+
+
+class ProblemDetailResponse(BaseModel):
+    problemId: str
+    problemVersionId: str
+    title: str
+    summary: Optional[str] = None
+    statementMarkdown: Optional[str] = None
+    difficulty: Optional[str] = None
+    topicId: Optional[str] = None
+    examples: Optional[dict] = None
+    constraints: Optional[dict] = None
+    inputSpec: Optional[str] = None
+    outputSpec: Optional[str] = None
+    timeLimitMs: Optional[int] = None
+    memoryLimitMb: Optional[int] = None
+    allowedLanguages: Optional[list] = None
+    sourceDataset: Optional[str] = None
+    externalId: Optional[str] = None
+    testsObjectKey: Optional[str] = None

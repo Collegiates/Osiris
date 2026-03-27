@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from uuid import uuid4, UUID
 from fastapi import APIRouter, Header, HTTPException, status
 
@@ -35,7 +36,13 @@ def buildCsQuestions() -> list[Question]:
         "Explain the purpose of a binary search tree.",
         "What is dynamic programming used for?",
         "When would you use a set instead of a list?",
+        "What is the difference between a set and a map?",
+        "What is an invariant in an algorithm?",
+        "Explain what a heap is used for.",
+        "Why is recursion sometimes slower than iteration?",
+        "What does it mean for an algorithm to be greedy?",
     ]
+    selectedPrompts = random.sample(prompts, k=min(10, len(prompts)))
     return [
         Question(
             questionId=uuid4(),
@@ -44,22 +51,56 @@ def buildCsQuestions() -> list[Question]:
             difficulty=Difficulty.easy,
             prompt=prompt,
         )
-        for prompt in prompts
+        for prompt in selectedPrompts
     ]
 
 
-def buildCodingQuestions(count: int) -> list[Question]:
+def buildCodingQuestions(assessmentType: AssessmentType) -> list[Question]:
+    easyPrompts = [
+        ("Write a function that finds the maximum value in an array.", Topic.arraysStrings, Difficulty.easy),
+        ("Return true if a string has all unique characters.", Topic.hashing, Difficulty.easy),
+        ("Given an array, return the sum of its elements.", Topic.arraysStrings, Difficulty.easy),
+    ]
+    mediumPrompts = [
+        ("Find the first non-repeating character in a string.", Topic.hashing, Difficulty.medium),
+        ("Given a list of integers, return the length of the longest increasing subsequence.", Topic.dp, Difficulty.medium),
+        ("Given a binary tree, return the level order traversal.", Topic.trees, Difficulty.medium),
+    ]
+
     questions: list[Question] = []
-    for _ in range(count):
+    if assessmentType == AssessmentType.short:
+        prompt, topic, difficulty = random.choice(easyPrompts + mediumPrompts)
         questions.append(
             Question(
                 questionId=uuid4(),
                 questionType=QuestionType.coding,
-                topic=Topic.arraysStrings,
-                difficulty=Difficulty.easy,
-                prompt="Write a function that finds the maximum value in an array.",
+                topic=topic,
+                difficulty=difficulty,
+                prompt=prompt,
             )
         )
+        return questions
+
+    easyPrompt, easyTopic, easyDifficulty = random.choice(easyPrompts)
+    mediumPrompt, mediumTopic, mediumDifficulty = random.choice(mediumPrompts)
+    questions.extend(
+        [
+            Question(
+                questionId=uuid4(),
+                questionType=QuestionType.coding,
+                topic=easyTopic,
+                difficulty=easyDifficulty,
+                prompt=easyPrompt,
+            ),
+            Question(
+                questionId=uuid4(),
+                questionType=QuestionType.coding,
+                topic=mediumTopic,
+                difficulty=mediumDifficulty,
+                prompt=mediumPrompt,
+            ),
+        ]
+    )
     return questions
 
 
@@ -78,6 +119,7 @@ def startAssessment(payload: AssessmentStartRequest, authorization: str | None =
         assessmentType=payload.assessmentType,
         createdAt=nowIso(),
         questionIds=[],
+        questionTypeById={},
     )
     memoryStore.getUserState(userId).assessments[assessmentId] = session
 
@@ -99,13 +141,14 @@ def getAssessment(assessmentId: UUID, authorization: str | None = Header(default
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
 
     assessmentType = userState.assessments[assessmentId].assessmentType
-    codingCount = 1 if assessmentType == AssessmentType.short else 2
-    csCount = 10
-
-    questions = buildCodingQuestions(codingCount)
-    questions.extend(buildCsQuestions()[:csCount])
+    questions = buildCodingQuestions(assessmentType)
+    questions.extend(buildCsQuestions())
+    random.shuffle(questions)
 
     userState.assessments[assessmentId].questionIds = [q.questionId for q in questions]
+    userState.assessments[assessmentId].questionTypeById = {
+        q.questionId: q.questionType for q in questions
+    }
 
     return AssessmentGetResponse(
         assessmentId=assessmentId,
@@ -129,13 +172,27 @@ def submitAssessment(
     assessmentType = userState.assessments[assessmentId].assessmentType
     expectedAnswers = 11 if assessmentType == AssessmentType.short else 12
     totalAnswers = len(payload.answers)
-    score = min(1.0, totalAnswers / expectedAnswers)
+    coverageScore = min(1.0, totalAnswers / expectedAnswers)
+    timeScore = min(1.0, payload.timeSpentSeconds / max(1, expectedAnswers * 90))
+
+    session = userState.assessments[assessmentId]
+    answerScores: list[float] = []
+    for questionId, answer in payload.answers.items():
+        questionType = session.questionTypeById.get(questionId, QuestionType.cs)
+        answerLength = len(answer.strip())
+        if questionType == QuestionType.coding:
+            answerScores.append(1.0 if answerLength >= 20 else 0.5)
+        else:
+            answerScores.append(1.0 if answerLength >= 10 else 0.5)
+    answerQualityScore = sum(answerScores) / len(answerScores) if answerScores else 0.0
+
+    score = min(1.0, (coverageScore * 0.5) + (answerQualityScore * 0.3) + (timeScore * 0.2))
     hiddenSkillLevel = round(score, 2)
 
     profile = {
-        Topic.arraysStrings: 0.6,
-        Topic.hashing: 0.4,
-        Topic.trees: 0.3,
+        Topic.arraysStrings: min(1.0, hiddenSkillLevel + 0.1),
+        Topic.hashing: hiddenSkillLevel,
+        Topic.trees: max(0.0, hiddenSkillLevel - 0.2),
     }
     userState.skillProfile = UserSkillProfile(hiddenSkillLevel=hiddenSkillLevel, topicScores=profile)
 

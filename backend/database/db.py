@@ -9,7 +9,7 @@ load_dotenv()
 router = APIRouter()
 
 @router.get("/api/env")
-def get_env():
+def getEnv():
     # 3. Use the secret variable HERE inside the backend
     # Return the keys needed by the frontend Supabase client
     return {
@@ -18,6 +18,6 @@ def get_env():
     }
 
 @router.get("/api/data")
-def read_data():
+def readData():
     # Example route
     return {"message": "Here is the secure data", "status": "success"}

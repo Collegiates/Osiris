@@ -8,6 +8,7 @@ Provide secure assessment evaluation and hidden skill level calculation while en
 - Assessment delivery and scoring.
 - Hidden skill level calculation and updates.
 - Problem content ingestion and read-only delivery from Supabase.
+- Roadmap graph generation, branching, and progress tracking.
 
 ## Implemented API Areas
 - `POST /assessments`
@@ -15,6 +16,11 @@ Provide secure assessment evaluation and hidden skill level calculation while en
 - `POST /assessments/{assessmentId}/submit`
 - `GET /problems`
 - `GET /problems/{problemId}`
+- `GET /roadmaps`
+- `GET /roadmaps/{roadmapId}`
+- `POST /roadmaps/start`
+- `POST /roadmaps/{roadmapId}/nodes/{nodeId}/progress`
+- `POST /roadmaps/{roadmapId}/nodes/{nodeId}/branch`
 
 ## Assessment Rules
 - Short assessment: 1 coding problem (easy to medium) + 10 CS questions.
@@ -27,6 +33,7 @@ Provide secure assessment evaluation and hidden skill level calculation while en
 - Store hidden skill level snapshot per user in memory.
 - Store problem metadata and versions in Supabase (CodeNet ingestion).
 - Store test suites in Supabase Storage with object key references in `problem_versions` and `test_suites`.
+- Store roadmap nodes, edges, and per-user node progress in Supabase.
 
 ## Security Notes
 - Supabase RLS for data ownership boundaries (planned).

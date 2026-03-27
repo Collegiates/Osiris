@@ -20,6 +20,8 @@ from backend.models.schemas import (
     nowIso,
 )
 from backend.database.memoryStore import memoryStore, AssessmentSession, UserSkillProfile
+from backend.database.supabaseClient import getSupabaseClient
+from backend.database.userProfiles import getOrCreateUserProfileId
 
 router = APIRouter(prefix="/assessments", tags=["assessments"])
 
@@ -106,7 +108,8 @@ def buildCodingQuestions(assessmentType: AssessmentType) -> list[Question]:
 
 @router.post("", response_model=AssessmentStartResponse)
 def startAssessment(payload: AssessmentStartRequest, authorization: str | None = Header(default=None)):
-    userId = requireUser(authorization)
+    userClaims = requireUser(authorization)
+    userId = userClaims["authUid"]
 
     if payload.assessmentType not in {AssessmentType.short, AssessmentType.normal}:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid assessment type")
@@ -134,7 +137,8 @@ def startAssessment(payload: AssessmentStartRequest, authorization: str | None =
 
 @router.get("/{assessmentId}", response_model=AssessmentGetResponse)
 def getAssessment(assessmentId: UUID, authorization: str | None = Header(default=None)):
-    userId = requireUser(authorization)
+    userClaims = requireUser(authorization)
+    userId = userClaims["authUid"]
     userState = memoryStore.getUserState(userId)
 
     if assessmentId not in userState.assessments:
@@ -163,7 +167,8 @@ def submitAssessment(
     payload: AssessmentSubmitRequest,
     authorization: str | None = Header(default=None),
 ):
-    userId = requireUser(authorization)
+    userClaims = requireUser(authorization)
+    userId = userClaims["authUid"]
     userState = memoryStore.getUserState(userId)
 
     if assessmentId not in userState.assessments:
@@ -195,6 +200,19 @@ def submitAssessment(
         Topic.trees: max(0.0, hiddenSkillLevel - 0.2),
     }
     userState.skillProfile = UserSkillProfile(hiddenSkillLevel=hiddenSkillLevel, topicScores=profile)
+
+    try:
+        supabaseClient = getSupabaseClient()
+        profileId = getOrCreateUserProfileId(supabaseClient, userClaims["authUid"], userClaims.get("email"))
+        supabaseClient.table("userskillsnapshots").insert(
+            {
+                "userid": profileId,
+                "hiddenskilllevel": hiddenSkillLevel,
+                "topicscores": {key.value: value for key, value in profile.items()},
+            }
+        ).execute()
+    except Exception:
+        pass
 
     skillProfile = [
         SkillScore(topic=topic, score=value, confidence=0.5)

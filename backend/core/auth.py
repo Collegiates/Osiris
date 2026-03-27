@@ -1,7 +1,14 @@
-from typing import Optional
+from typing import Optional, TypedDict
 from fastapi import HTTPException, status
+import jwt
 
-def requireUser(authorization: Optional[str]) -> str:
+
+class UserClaims(TypedDict):
+    authUid: str
+    email: Optional[str]
+
+
+def requireUser(authorization: Optional[str]) -> UserClaims:
     """
     Placeholder auth gate.
 
@@ -16,5 +23,16 @@ def requireUser(authorization: Optional[str]) -> str:
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Empty token")
 
-    # TEMP: treat token as user_id for local testing
-    return token
+    authUid = token
+    email = None
+
+    if token.count(".") == 2:
+        try:
+            payload = jwt.decode(token, options={"verify_signature": False})
+            authUid = payload.get("sub", token)
+            email = payload.get("email")
+        except Exception:
+            authUid = token
+            email = None
+
+    return {"authUid": authUid, "email": email}

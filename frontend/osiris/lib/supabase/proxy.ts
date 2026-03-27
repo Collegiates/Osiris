@@ -118,7 +118,7 @@ export const updateSession = async (request: NextRequest) => {
   } = await supabase.auth.getUser();
 
   const pathName = request.nextUrl.pathname;
-  const protectedPrefixes = ["/protected", "/assessment"];
+  const protectedPrefixes = ["/protected", "/assessment", "/roadmaps"];
   const isProtectedRoute = protectedPrefixes.some((prefix) => pathName.startsWith(prefix));
 
   if (!user && isProtectedRoute) {

@@ -119,3 +119,52 @@ class ProblemDetailResponse(BaseModel):
     sourceDataset: Optional[str] = None
     externalId: Optional[str] = None
     testsObjectKey: Optional[str] = None
+
+
+class RoadmapTopicResponse(BaseModel):
+    topicId: str
+    slug: str
+    name: str
+
+
+class RoadmapStartRequest(BaseModel):
+    topicId: str
+
+
+class RoadmapStartResponse(BaseModel):
+    roadmapId: str
+
+
+class RoadmapListItem(BaseModel):
+    roadmapId: str
+    topicId: str
+    title: str
+    isActive: bool
+
+
+class RoadmapNodeResponse(BaseModel):
+    nodeId: str
+    problemVersionId: str
+    title: str
+    difficulty: Optional[str] = None
+    nodeType: str
+    positionIndex: int
+    state: str
+
+
+class RoadmapEdgeResponse(BaseModel):
+    fromNodeId: str
+    toNodeId: str
+    edgeType: str
+
+
+class RoadmapResponse(BaseModel):
+    roadmapId: str
+    topicId: str
+    title: str
+    nodes: List[RoadmapNodeResponse]
+    edges: List[RoadmapEdgeResponse]
+
+
+class RoadmapProgressRequest(BaseModel):
+    state: str

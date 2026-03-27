@@ -17,3 +17,24 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   }
   return (await response.json()) as T;
 }
+
+export async function apiFetchWithAuth<T>(
+  path: string,
+  accessToken: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const apiUrl = getApiUrl();
+  const response = await fetch(`${apiUrl}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      ...(options.headers || {}),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return (await response.json()) as T;
+}

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { apiFetch } from "@/lib/apiClient";
-
-const authHeader = { Authorization: "Bearer demo-user" };
+import { apiFetchWithAuth } from "@/lib/apiClient";
+import { useSupabase } from "@/components/supabase-provider";
 
 type AssessmentType = "short" | "normal";
 
@@ -35,6 +34,7 @@ type AssessmentResultResponse = {
 };
 
 export default function AssessmentPage() {
+  const supabase = useSupabase();
   const [assessmentType, setAssessmentType] = useState<AssessmentType>("short");
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -42,22 +42,32 @@ export default function AssessmentPage() {
   const [result, setResult] = useState<AssessmentResultResponse | null>(null);
   const [instructions, setInstructions] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadToken = async () => {
+      const { data } = await supabase.auth.getSession();
+      setAccessToken(data.session?.access_token ?? null);
+    };
+    loadToken();
+  }, [supabase]);
 
   const startAssessment = async () => {
     setLoading(true);
     setResult(null);
     try {
-      const start = await apiFetch<AssessmentStartResponse>("/assessments", {
+      if (!accessToken) return;
+      const start = await apiFetchWithAuth<AssessmentStartResponse>("/assessments", accessToken, {
         method: "POST",
-        headers: authHeader,
         body: JSON.stringify({ assessmentType }),
       });
       setAssessmentId(start.assessmentId);
       setInstructions(start.instructions);
 
-      const fetched = await apiFetch<AssessmentGetResponse>(`/assessments/${start.assessmentId}`, {
-        headers: authHeader,
-      });
+      const fetched = await apiFetchWithAuth<AssessmentGetResponse>(
+        `/assessments/${start.assessmentId}`,
+        accessToken
+      );
       setQuestions(fetched.questions);
     } finally {
       setLoading(false);
@@ -68,17 +78,18 @@ export default function AssessmentPage() {
     if (!assessmentId) return;
     setLoading(true);
     try {
+      if (!accessToken) return;
       const payload = {
         answers: Object.fromEntries(
           Object.entries(answers).map(([questionId, answer]) => [questionId, answer])
         ),
         timeSpentSeconds: 0,
       };
-      const response = await apiFetch<AssessmentResultResponse>(
+      const response = await apiFetchWithAuth<AssessmentResultResponse>(
         `/assessments/${assessmentId}/submit`,
+        accessToken,
         {
           method: "POST",
-          headers: authHeader,
           body: JSON.stringify(payload),
         }
       );

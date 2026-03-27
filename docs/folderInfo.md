@@ -29,3 +29,4 @@
 - `docs/backInfo.md`: Backend function plan.
 - `docs/aiSuggestions.md`: AI runtime options and recommendations.
 - `docs/folderInfo.md`: Project folder map.
+- `docs/stage3_roadmap_schema.sql`: Roadmap graph schema changes for Stage 3.

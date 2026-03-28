@@ -8,8 +8,8 @@
 - `README.md`: Setup instructions and project summary.
 
 ## Frontend
-- `frontend/osiris/app`: Next.js routes for landing and assessment.
-- `frontend/osiris/components`: Shared UI components and status providers.
+- `frontend/osiris/app`: Next.js routes for landing, assessment, roadmaps, and problems.
+- `frontend/osiris/components`: Shared UI components, problem workspace components, and status providers.
 - `frontend/osiris/lib`: Client utilities (API and Supabase helpers).
 
 ## Backend
